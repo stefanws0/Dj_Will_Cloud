@@ -3,25 +3,20 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const mongoosePaginate = require('mongoose-paginate');
 mongoose.Promise = Promise;
+const Schema = mongoose.Schema;
 
 // variables
-let BrandSchema = new mongoose.Schema({
+let TypeSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
     minlength: 5,
     maxlength: 25
   },
-  description: {
-    type: String,
-    required: true,
-    minlength: 10,
-    maxlength: 100
-  }
 });
 
 // set schema as schema in the database for Application
-BrandSchema.plugin(mongoosePaginate);
-const Brand = mongoose.model('Brand', BrandSchema);
+TypeSchema.plugin(mongoosePaginate);
+const Type = mongoose.model('Type', TypeSchema);
 
-module.exports = Brand;
+module.exports = Type;

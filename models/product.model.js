@@ -6,7 +6,7 @@ mongoose.Promise = Promise;
 const Schema = mongoose.Schema;
 
 // variables
-let ShoeSchema = new mongoose.Schema({
+let ProductSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -15,7 +15,7 @@ let ShoeSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
     minlength: 10,
     maxlength: 100
   },
@@ -25,13 +25,14 @@ let ShoeSchema = new mongoose.Schema({
     min: 0,
     max: 5000
   },
+  type: { type: Schema.Types.ObjectId, ref: 'Type', required: true},
   brand: { type: Schema.Types.ObjectId, ref: 'Brand' }
 });
 
 
 
 // set schema as schema in the database for Application
-ShoeSchema.plugin(mongoosePaginate);
-const Shoe = mongoose.model('Shoe', ShoeSchema);
+ProductSchema.plugin(mongoosePaginate);
+const Product = mongoose.model('Product', ProductSchema);
 
-module.exports = Shoe;
+module.exports = Product;

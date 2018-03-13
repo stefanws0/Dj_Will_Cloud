@@ -12,11 +12,11 @@ function getBrands(query, page, limit) {
       page,
       limit
     };
-    Brand.paginate(query, options, (err, Brands) => {
+    Brand.paginate(query, options, (err, brands) => {
       if (err) {
         reject(err);
       } else {
-        resolve(Brands);
+        resolve(brands);
       }
     });
   });
@@ -25,55 +25,51 @@ function getBrands(query, page, limit) {
 // Retrieve specific Brand based on id
 function getBrand(id) {
   return new Promise((resolve, reject) => {
-    Brand.findOne({_id: id}, (err, Brand) => {
+    Brand.findOne({_id: id}, (err, brand) => {
       if (err) {
         reject(err);
       } else {
-        resolve(Brand);
+        resolve(brand);
       }
     });
   });
 }
 
 // Create a new Brand and save it to the database
-function createBrand(Brand) {
+function createBrand(brand) {
   return new Promise((resolve, reject) => {
-    let newBrand = new Brand({
-      title: Brand.title,
-      description: Brand.description,
-      price: Brand.price,
-      brand: Brand.brand
+    let newBrand = new brand({
+      title: brand.title,
+      description: brand.description,
     });
-    newBrand.save((err, Brand) => {
+    newBrand.save((err, brand) => {
       if (err) {
         reject(err);
       }
       else { //If no errors, send it back to the client
-        resolve(Brand);
+        resolve(brand);
       }
     });
   });
 }
 
 // Update new information to a certain Brand based on id
-function updateBrand(Brand) {
+function updateBrand(brand) {
   return new Promise((resolve, reject) => {
-    let id = Brand._id;
+    let id = brand._id;
 
     Brand.findOne({_id: new ObjectId(id)}, (err, retrievedBrand) => {
       if (err) {
         reject(err);
       } else {
-        retrievedBrand.title = Brand.title;
-        retrievedBrand.description = Brand.description;
-        retrievedBrand.price = Brand.price;
-        retrievedBrand.brand = Brand.brand;
-        retrievedBrand.save((err, Brand) => {
+        retrievedBrand.title = brand.title;
+        retrievedBrand.description = brand.description;
+        retrievedBrand.save((err, brand) => {
           if (err) {
             reject(err);
           }
           else { //If no errors, send it back to the client
-            resolve(Brand);
+            resolve(brand);
           }
         });
       }

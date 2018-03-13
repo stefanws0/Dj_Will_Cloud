@@ -1,5 +1,5 @@
 // dependencies
-const BrandService = require('../services/Brands.service');
+const brandService = require('../services/brands.service');
 
 // variables
 _this = this;
@@ -9,9 +9,9 @@ exports.getBrands = (req, res, next) => {
   let page = req.query.page ? req.query.page : 1;
   let limit = req.query.limit ? req.query.limit : 10;
 
-  BrandService.getBrands({}, page, limit)
-    .then((Brands) => {
-      return res.status(200).json(Brands);
+  brandService.getBrands({}, page, limit)
+    .then((brands) => {
+      return res.status(200).json(brands);
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -22,9 +22,9 @@ exports.getBrands = (req, res, next) => {
 exports.getBrand = (req, res, next) => {
   let id = req.params.id;
 
-  BrandService.getBrand(id)
-    .then((Brand) => {
-      return res.status(200).json(Brand);
+  brandService.getBrand(id)
+    .then((brand) => {
+      return res.status(200).json(brand);
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -33,13 +33,13 @@ exports.getBrand = (req, res, next) => {
 
 // export a method that sends a new application to the application service
 exports.createBrand = (req, res, next) => {
-  let Brand = {
+  let brand = {
     title: req.body.title,
     description: req.body.description,
     price: req.body.price,
     brand: req.body.brand,
   };
-  BrandService.createBrand(Brand)
+  brandService.createBrand(brand)
     .then((createdBrand) => {
       return res.status(201).json(createdBrand);
     })
@@ -50,14 +50,14 @@ exports.createBrand = (req, res, next) => {
 
 // export a method that sends new information with id to the application service
 exports.updateBrand = (req, res, next) => {
-  let Brand = {
+  let brand = {
     _id: req.body._id ? req.body._id : null,
     title: req.body.title ? req.body.title : null,
     description: req.body.description ? req.body.description : null,
     price: req.body.price ? req.body.price : null,
     brand: req.body.brand ? req.body.brand : null
   };
-  BrandService.updateBrand(Brand)
+  brandService.updateBrand(brand)
     .then((updatedBrand) => {
       return res.status(200).json(updatedBrand)
     })
@@ -70,9 +70,9 @@ exports.updateBrand = (req, res, next) => {
 exports.removeBrand = (req, res, next) => {
   let id = req.params.id;
 
-  BrandService.deleteBrand(id)
-    .then((Brand) => {
-      return res.status(204).json(Brand)
+  brandService.deleteBrand(id)
+    .then((brand) => {
+      return res.status(204).json(brand)
     })
     .catch((e) => {
       return res.status(400).send(e);

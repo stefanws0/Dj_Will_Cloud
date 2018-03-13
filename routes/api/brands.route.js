@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const BrandController = require('../../conrtrollers/brands.controller');
+const brandController = require('../../controllers/brands.controller');
 
-router.get('/:id', BrandController.getBrand);
-router.get('/', BrandController.getBrands);
-router.post('/', BrandController.createBrand);
-router.put('/:id',BrandController.updateBrand);
-router.delete('/:id', BrandController.removeBrand);
+router.get('/:id', brandController.getBrand);
+router.get('/', brandController.getBrands);
+router.post('/', brandController.createBrand);
+router.put('/:id',brandController.updateBrand);
+router.delete('/:id', brandController.removeBrand);
 
 // export router
 module.exports = router;
