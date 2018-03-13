@@ -1,16 +1,20 @@
+const productController = require('../controllers/products.controller');
+
 module.exports = function (app, passport) {
 
   app.get('/', function (req, res) {
     res.render('index.ejs'); // load the index.ejs file
   });
   app.get('/login', function (req, res) {
-
-    if (isFromApplication(req)) {
-      res.json("Error");
-    } else {
-      // render the page and pass in any flash data if it exists
-      res.render('login.ejs', {message: req.flash('loginMessage')});
-    }
+    res.format({
+      html: function () {
+        // render the page and pass in any flash data if it exists
+        res.render('login.ejs', {message: req.flash('loginMessage')});
+      },
+      json: function () {
+        res.json("Error");
+      }
+    });
   });
 
   app.post('/login', passport.authenticate('local-login', {
@@ -21,13 +25,15 @@ module.exports = function (app, passport) {
 
   // show the signup form
   app.get('/signup', function (req, res) {
-
-    if (isFromApplication(req)) {
-      res.json("Error");
-    } else {
-      // render the page and pass in any flash data if it exists
-      res.render('signup.ejs', {message: req.flash('signupMessage')});
-    }
+    res.format({
+      html: function () {
+        // render the page and pass in any flash data if it exists
+        res.render('signup.ejs', {message: req.flash('signupMessage')});
+      },
+      json: function () {
+        res.json("Error");
+      }
+    });
   });
 
   app.post('/signup', passport.authenticate('local-signup', {
@@ -41,13 +47,16 @@ module.exports = function (app, passport) {
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
   app.get('/profile', isLoggedIn, function (req, res) {
-    if (isFromApplication(req)) {
-      res.json(req.user);
-    } else {
-      res.render('profile.ejs', {
-        user: req.user // get the user out of session and pass to template
-      });
-    }
+    res.format({
+      html: function () {
+        res.render('profile.ejs', {
+          user: req.user // get the user out of session and pass to template
+        });
+      },
+      json: function () {
+        res.json(req.user);
+      }
+    })
   });
 
   // LOGOUT
@@ -59,9 +68,21 @@ module.exports = function (app, passport) {
   // CRUD ROUTES
 
   //products
-  app.get('/products', function () {
+  app.get('/products', function (req, res) {
+    console.log("hoi");
+    res.format({
+      html: function () {
+        res.render('products/index.ejs', {
+          user: req.user // get the user out of session and pass to template
+        });
+      },
+      json: function () {
+        res.json(productController.getProducts);
+      }
+    })
+  });
 
-  })
+  //brands
 
   // FACEBOOK ROUTES
 
