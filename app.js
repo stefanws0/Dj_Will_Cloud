@@ -15,7 +15,7 @@ const app = express();
 
 // database connection
 mongoose.Promise = bluebird;
-let databaseURL = "mongodb://localhost/RetroChic";
+let databaseURL = "mongodb://admin2:admin@ds151908.mlab.com:51908/retro-chic";
 mongoose.connect(databaseURL)
   .then(() => {
     console.log('Succesfully connected to the Database at URL: ' + databaseURL);
