@@ -91,7 +91,7 @@
             <td><%= products[i].description %></td>
             <td><%= products[i].price %></td>
             <td>
-              <a id="edit" data-toggle="modal" data-target="#editModal" data-title=<%= products[i].title %> data-description=<%= products[i].description %> data-price=<%= products[i].price %>>
+              <a id="edit" href="/dashboard/products/<%= products[i]._id%>">
                 <span data-feather="edit-3"></span>
               </a>
               <a id="delete" data-toggle="modal" data-target="#deleteModal" data-whatever="@getbootstrap">
@@ -107,38 +107,6 @@
   </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="product-title" class="col-form-label">Title</label>
-            <input type="text" class="form-control" id="product-title">
-          </div>
-          <div class="form-group">
-            <label for="product-description" class="col-form-label">Description</label>
-            <textarea class="form-control" id="product-description"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="product-price" class="col-form-label">Price</label>
-            <input type="number" class="form-control" id="product-price">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -158,6 +126,8 @@
     </div>
   </div>
 </div>
+
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

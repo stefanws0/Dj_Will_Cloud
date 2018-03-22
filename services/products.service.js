@@ -1,5 +1,5 @@
 // dependencies
-let Product = require('../models/Product.model');
+let Product = require('../models/product.model');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // variables
