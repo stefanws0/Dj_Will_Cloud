@@ -44,7 +44,11 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret : 'bigsecret'}));
+app.use(session({
+  secret : 'bigsecret',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

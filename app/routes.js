@@ -1,4 +1,4 @@
-const productController = require('../controllers/products.controller');
+const productService = require('../services/products.service');
 
 module.exports = function (app, passport) {
 
@@ -18,7 +18,7 @@ module.exports = function (app, passport) {
   });
 
   app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/dashboard', // redirect to the secure profile section
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -37,7 +37,7 @@ module.exports = function (app, passport) {
   });
 
   app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/dashboard', // redirect to the secure profile section
     failureRedirect: '/signup', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -67,19 +67,31 @@ module.exports = function (app, passport) {
 
   // CRUD ROUTES
 
+  //dashboard
+  app.get('/dashboard', function (req, res) {
+    res.render('dashboard.ejs');
+  });
+
   //products
-  app.get('/products', function (req, res) {
-    console.log("hoi");
-    res.format({
-      html: function () {
-        res.render('products/index.ejs', {
-          user: req.user // get the user out of session and pass to template
-        });
-      },
-      json: function () {
-        res.json(productController.getProducts);
-      }
-    })
+  app.get('/dashboard/products', function (req, res) {
+
+    let page = req.query.page ? req.query.page : 1;
+    let limit = req.query.limit ? req.query.limit : 10;
+
+    productService.getProducts({}, page, limit).then((products) => {
+      console.log(products.docs);
+      res.format({
+        html: function () {
+          res.render('products/index.ejs', {
+            products: products.docs // get the user out of session and pass to template
+          });
+        },
+        json: function () {
+          res.json(products.docs);
+        }
+      })
+    });
+
   });
 
   //brands
