@@ -54,8 +54,8 @@ app.use(passport.session());
 app.use(flash());
 
 // route setup
-require('./app/routes.js')(app, passport);
-
+// require('./app/routes.js')(app, passport);
+app.use('/', api);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');

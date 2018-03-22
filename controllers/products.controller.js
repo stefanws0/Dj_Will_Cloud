@@ -11,7 +11,17 @@ exports.getProducts = (req, res, next) => {
 
   productService.getProducts({}, page, limit)
     .then((products) => {
-      return res.status(200).json(products);
+      console.log(products);
+      return res.format({
+        html: function () {
+          res.render('products/index.ejs', {
+            products: products.docs // get the user out of session and pass to template
+          });
+        },
+        json: function () {
+          res.json(products);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -24,7 +34,16 @@ exports.getProduct = (req, res, next) => {
 
   productService.getProduct(id)
     .then((product) => {
-      return res.status(200).json(product);
+      return res.format({
+        html: () => {
+          res.render('products/edit.ejs', {
+            product: product
+          });
+        },
+        json: () => {
+          res.json(product);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -52,13 +71,14 @@ exports.createProduct = (req, res, next) => {
 // export a method that sends new information with id to the application service
 exports.updateProduct = (req, res, next) => {
   let product = {
-    _id: req.body._id ? req.body._id : null,
+    _id: req.params.id ? req.params.id : null,
     title: req.body.title ? req.body.title : null,
     description: req.body.description ? req.body.description : null,
     price: req.body.price ? req.body.price : null,
     brand: req.body.brand ? req.body.brand : null,
     type: req.body.type ? req.body.type: null
   };
+
   productService.updateProduct(product)
     .then((updatedProduct) => {
       return res.status(200).json(updatedProduct)

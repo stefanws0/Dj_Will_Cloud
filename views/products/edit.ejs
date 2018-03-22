@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
   <% include ../partials/head %>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
   <script type="text/javascript">
-
 
     $(document).ready(function() {
       $('#editForm').on('submit', function(event){
@@ -13,25 +10,23 @@
         // let formData = new FormData(currentForm);
 
         $.ajax({
-          url: '/dashboard/products',    //Your api url
+          url: '/products/' + document.body.getAttribute('data-id'),    //Your api url
           type: 'PUT',   //type is any HTTP method,
           dataType: "json",
           data: $(this).serialize()
-        })
-        ;
-
+        });
       });
     });
   </script>
 </head>
-<body>
+<body data-id="<%= product._id %>">
 <% include ../partials/nav %>
 <div class="container-fluid">
   <div class="row">
     <% include ../partials/dashboard.nav.ejs %>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h3><a href="/dashboard/products">products </a>> <%= product.title %></h3>
+        <h3><a href="/products">products </a>> <%= product.title %></h3>
       </div>
       <br>
       <form id="editForm">
@@ -74,27 +69,6 @@
         <button id="submit" type="submit" class="btn btn-primary">Edit</button>
       </form>
     </main>
-  </div>
-</div>
-
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="deleteModalDescription">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="deleteModalDeleteButton" type="button" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
   </div>
 </div>
 

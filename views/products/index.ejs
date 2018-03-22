@@ -33,7 +33,7 @@
             <td><%= products[i].description %></td>
             <td><%= products[i].price %></td>
             <td>
-              <a class="edit" id="edit" href="/dashboard/products/<%= products[i]._id %>">
+              <a class="edit" id="edit" href="/products/<%= products[i]._id %>">
                 <span data-feather="edit-3"></span>
               </a>
               <a class="delete" id="delete" data-toggle="modal" data-target="#deleteModal"
