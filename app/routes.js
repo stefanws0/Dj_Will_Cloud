@@ -79,7 +79,6 @@ module.exports = function (app, passport) {
     let limit = req.query.limit ? req.query.limit : 10;
 
     productService.getProducts({}, page, limit).then((products) => {
-      console.log(products.docs);
       res.format({
         html: function () {
           res.render('products/index.ejs', {
@@ -92,6 +91,30 @@ module.exports = function (app, passport) {
       })
     });
 
+  });
+
+  app.get('/dashboard/products/:id', (req, res) => {
+
+    let productId = req.params.id;
+
+    productService.getProduct(productId).then((product) => {
+      console.log(product);
+      res.format({
+        html: () => {
+          res.render('products/edit.ejs', {
+            product: product
+          });
+        },
+        json: () => {
+          res.json(product);
+        }
+      })
+    });
+  });
+
+  app.put('/dashboard/products', (req, res) => {
+    console.log(req.body);
+    res.json(req.body);
   });
 
   //brands

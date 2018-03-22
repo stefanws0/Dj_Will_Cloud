@@ -95,3 +95,21 @@ body {
 
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.delete {
+  color: #9d0000 !important;
+}
+
+.delete:hover {
+  color: red !important;
+  text-decoration: none;
+}
+
+.edit {
+  color: #17549f !important;
+}
+
+.edit:hover {
+  color: dodgerblue !important;
+  text-decoration: none;
+}
