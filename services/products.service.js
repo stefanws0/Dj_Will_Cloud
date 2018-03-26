@@ -60,7 +60,6 @@ function createProduct(product) {
 function updateProduct(product) {
   return new Promise((resolve, reject) => {
     let id = product._id;
-    console.log(product);
 
     Product.findOne({_id: new ObjectId(id)}, (err, retrievedProduct) => {
       if (err) {

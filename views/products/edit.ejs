@@ -13,7 +13,15 @@
           url: '/products/' + document.body.getAttribute('data-id'),    //Your api url
           type: 'PUT',   //type is any HTTP method,
           dataType: "json",
-          data: $(this).serialize()
+          data: $(this).serialize(),
+          error: function (request, error) {
+            console.log(arguments);
+            alert(" Can't do because: " + arguments[0].responseJSON.message);
+          },
+          success: function () {
+            alert(" Done ! ");
+            location.href = "/products/1";
+          }
         });
       });
     });
