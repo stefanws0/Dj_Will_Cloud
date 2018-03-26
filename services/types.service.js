@@ -12,13 +12,23 @@ function getTypes(query, page, limit) {
       page,
       limit
     };
-    Type.paginate(query, options, (err, types) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(types);
-      }
-    });
+    if(limit === 0){
+      Type.find((err, types) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(types);
+        }
+      })
+    }else {
+      Type.paginate(query, options, (err, types) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(types);
+        }
+      });
+    }
   });
 }
 

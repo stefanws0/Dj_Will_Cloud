@@ -60,6 +60,7 @@ function createProduct(product) {
 function updateProduct(product) {
   return new Promise((resolve, reject) => {
     let id = product._id;
+    console.log(product);
 
     Product.findOne({_id: new ObjectId(id)}, (err, retrievedProduct) => {
       if (err) {
@@ -96,6 +97,18 @@ function deleteProduct(id) {
   });
 }
 
+function getCount() {
+  return new Promise((resolve, reject) => {
+    Product.count((err, count) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(count);
+      }
+    })
+  });
+}
+
 
 //export all the functions
-module.exports = {deleteProduct, updateProduct, getProduct, getProducts, createProduct};
+module.exports = {deleteProduct, updateProduct, getProduct, getProducts, createProduct, getCount};

@@ -12,13 +12,23 @@ function getBrands(query, page, limit) {
       page,
       limit
     };
-    Brand.paginate(query, options, (err, brands) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(brands);
-      }
-    });
+    if(limit === 0){
+      Brand.find((err, brands) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(brands);
+        }
+      })
+    }else {
+      Brand.paginate(query, options, (err, brands) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(brands);
+        }
+      });
+    }
   });
 }
 

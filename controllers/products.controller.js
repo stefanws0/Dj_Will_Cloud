@@ -1,25 +1,31 @@
 // dependencies
+const promise = require('bluebird');
 const productService = require('../services/products.service');
+const brandService = require('../services/brands.service');
+const typeService = require('../services/types.service');
 
 // variables
 _this = this;
 
 // export method that retrieves the applications from the application service
 exports.getProducts = (req, res, next) => {
-  let page = req.query.page ? req.query.page : 1;
-  let limit = req.query.limit ? req.query.limit : 10;
+  console.log(req.params);
+  let page = req.params.page ? req.params.page : 1;
+  let limit = req.params.limit ? req.params.limit : 10;
 
-  productService.getProducts({}, page, limit)
-    .then((products) => {
-      console.log(products);
+
+  promise.all([productService.getProducts({}, page, limit), productService.getCount()])
+    .then((results) => {
       return res.format({
         html: function () {
           res.render('products/index.ejs', {
-            products: products.docs // get the user out of session and pass to template
+            products: results[0].docs, // get the user out of session and pass to template
+            current: page,
+            pages: Math.ceil(results[1] / limit)
           });
         },
         json: function () {
-          res.json(products);
+          res.json(results[0]);
         }
       })
     })
@@ -32,21 +38,20 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   let id = req.params.id;
 
-  productService.getProduct(id)
-    .then((product) => {
+  promise.all([productService.getProduct(id), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
+    .then((results) => {
       return res.format({
-        html: () => {
+        html: function () {
           res.render('products/edit.ejs', {
-            product: product
+            product: results[0], // get the user out of session and pass to template
+            brands: results[1],
+            types: results[2]
           });
         },
-        json: () => {
-          res.json(product);
+        json: function () {
+          res.json(results[0]);
         }
       })
-    })
-    .catch((e) => {
-      return res.status(400).send(e);
     });
 };
 
@@ -76,7 +81,7 @@ exports.updateProduct = (req, res, next) => {
     description: req.body.description ? req.body.description : null,
     price: req.body.price ? req.body.price : null,
     brand: req.body.brand ? req.body.brand : null,
-    type: req.body.type ? req.body.type: null
+    type: req.body.type ? req.body.type : null
   };
 
   productService.updateProduct(product)
@@ -84,6 +89,7 @@ exports.updateProduct = (req, res, next) => {
       return res.status(200).json(updatedProduct)
     })
     .catch((e) => {
+      console.log(e);
       return res.status(400).send(e);
     });
 };

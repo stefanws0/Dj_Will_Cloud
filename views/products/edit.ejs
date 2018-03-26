@@ -52,8 +52,9 @@
           <div class="form-group col-md-5">
             <label for="inputBrand">Brand</label>
             <select name="brand" id="inputBrand" class="form-control">
-              <option selected>Choose...</option>
-              <option>Gucci</option>
+              <% for(var i = 0; i < brands.length; i++) { %>
+              <option value="<%= brands[i]._id %>"><%= brands[i].title %></option>
+              <% } %>
             </select>
           </div>
         </div>
@@ -61,8 +62,9 @@
           <div class="form-group col-md-5">
             <label for="inputType">Type</label>
             <select name="type" id="inputType" class="form-control">
-              <option selected>Choose...</option>
-              <option>Shoe</option>
+              <% for(var j = 0; j < types.length; j++) { %>
+              <option value="<%= types[j]._id %>"><%= types[j].title %></option>
+              <% } %>
             </select>
           </div>
         </div>
