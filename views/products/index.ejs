@@ -2,6 +2,36 @@
 <html lang="en">
 <head>
   <% include ../partials/head %>
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      $('#deleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id'); // Extract info from data-* attributes
+        let title = button.data('title');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        let modal = $(this);
+        modal.find('#deleteModalTitle').text("Delete " + title + "?");
+        modal.find('#deleteModalDescription').text("Are you sure you want to delete the products " + title + "?");
+        $('#deleteModalDeleteButton').button().click(function () {
+          $.ajax({
+            url: '/products/' + id,    //Your api url
+            type: 'DELETE',   //type is any HTTP method,
+            error: function (request, error) {
+              console.log(arguments);
+              alert(" Can't do because: " + arguments[0].responseJSON.message);
+            },
+            success: function () {
+              alert(" Done ! ");
+              location.href = "/products/1";
+            }
+          });
+        });
+
+      });
+    });
+  </script>
 </head>
 <body>
 <% include ../partials/nav %>
