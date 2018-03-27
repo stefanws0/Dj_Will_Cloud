@@ -9,10 +9,8 @@ _this = this;
 
 // export method that retrieves the applications from the application service
 exports.getProducts = (req, res, next) => {
-  console.log(req.params);
-  let page = req.params.page ? req.params.page : 1;
-  let limit = req.params.limit ? req.params.limit : 10;
-
+  let page = req.query.page ? req.query.page : 1;
+  let limit = req.query.limit ? req.query.limit : 10;
 
   promise.all([productService.getProducts({}, page, limit), productService.getCount(), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
     .then((results) => {
@@ -23,7 +21,8 @@ exports.getProducts = (req, res, next) => {
             current: page,
             pages: Math.ceil(results[1] / limit),
             brands: results[2],
-            types: results[3]
+            types: results[3],
+            user: req.user
           });
         },
         json: function () {
@@ -45,11 +44,17 @@ exports.getProduct = (req, res, next) => {
     .then((results) => {
       return res.format({
         html: function () {
-          res.status(200).render('products/edit.ejs', {
-            product: results[0], // get the user out of session and pass to template
-            brands: results[1],
-            types: results[2]
-          });
+          if(req.user.role === 1) {
+            res.status(200).render('products/edit.ejs', {
+              product: results[0], // get the user out of session and pass to template
+              brands: results[1],
+              types: results[2]
+            });
+          } else {
+            res.status(200).render('products/details.ejs', {
+              product: results[0]
+            })
+          }
         },
         json: function () {
           res.json(results[0]);
@@ -71,7 +76,7 @@ exports.createProduct = (req, res, next) => {
     .then((createdProduct) => {
       return res.status(201).format({
         html: function () {
-          res.redirect('/products/1');
+          res.redirect('/products?page=1');
         },
         json: function () {
           res.json(createdProduct);
@@ -93,6 +98,7 @@ exports.updateProduct = (req, res, next) => {
     brand: req.body.brand ? req.body.brand : null,
     type: req.body.type ? req.body.type : null
   };
+  console.log(product);
 
   productService.updateProduct(product)
     .then((updatedProduct) => {
