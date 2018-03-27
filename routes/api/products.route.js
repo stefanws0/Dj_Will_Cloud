@@ -5,6 +5,7 @@ const productController = require('../../controllers/products.controller');
 router.get('/', (req, res)=> {
   res.redirect('/products/1');
 });
+
 router.get('/:id/edit', productController.getProduct);
 router.get('/:page', productController.getProducts);
 router.post('/', productController.createProduct);

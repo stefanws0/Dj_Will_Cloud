@@ -13,17 +13,17 @@
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         let modal = $(this);
         modal.find('#deleteModalTitle').text("Delete " + title + "?");
-        modal.find('#deleteModalDescription').text("Are you sure you want to delete the products " + title + "?");
+        modal.find('#deleteModalDescription').text("Are you sure you want to delete the brand " + title + "? You will also delete all the products of this brand if you continue");
         $('#deleteModalDeleteButton').button().click(function () {
           $.ajax({
-            url: '/products/' + id,    //Your api url
+            url: '/brands/' + id,    //Your api url
             type: 'DELETE',   //type is any HTTP method,
             error: function (request, error) {
               console.log(arguments);
               alert(" Can't do because: " + arguments[0].responseJSON.message);
             },
             success: function () {
-              location.href = "/products/1";
+              location.href = "/brands/1";
             }
           });
         });
@@ -38,11 +38,11 @@
     <% include ../partials/dashboard.nav.ejs %>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-        <h1 class="h2">Products</h1>
+        <h1 class="h2">Brands</h1>
       </div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createModal">Add
-          Product
+          Brand
         </button>
       </div>
       <div class="table-responsive">
@@ -52,27 +52,21 @@
             <th>#</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Brand</th>
-            <th>Type</th>
-            <th>Price</th>
             <th>Buttons</th>
           </tr>
           </thead>
           <tbody>
-          <% for(let j = 0; j < products.length; j++) { %>
+          <% for(let j = 0; j < brands.length; j++) { %>
           <tr>
             <td><%= j + 1 %></td>
-            <td><%= products[j].title %></td>
-            <td><%= products[j].description %></td>
-            <td><%= products[j].brand.title %></td>
-            <td><%= products[j].type.title %></td>
-            <td><%= products[j].price %></td>
+            <td><%= brands[j].title %></td>
+            <td><%= brands[j].description %></td>
             <td>
-              <a class="edit" id="edit" href="/products/<%= products[j]._id %>/edit">
+              <a class="edit" id="edit" href="/brands/<%= brands[j]._id %>/edit">
                 <span data-feather="edit-3"></span>
               </a>
               <a class="delete" id="delete" data-toggle="modal" data-target="#deleteModal"
-                 data-id="<%= products[j]._id %>" data-title="<%= products[j].title %>">
+                 data-id="<%= brands[j]._id %>" data-title="<%= brands[j].title %>">
                 <span data-feather="trash-2"></span>
               </a>
             </td>
@@ -81,6 +75,7 @@
           </tbody>
         </table>
       </div>
+      <br>
       <% if (pages > 0) { %>
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
@@ -89,7 +84,7 @@
             <a class="page-link" href="#" tabindex="-1">First</a>
           </li>
           <% } else { %>
-          <li class="page-item"><a class="page-link" href="/products/1">First</a></li>
+          <li class="page-item"><a class="page-link" href="/brands/1">First</a></li>
           <% } %>
           <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
           <% if (i !== 1) { %>
@@ -101,7 +96,7 @@
           <% if (i == current) { %>
           <li class="page-item active"><a class="page-link"><%= i %></a></li>
           <% } else { %>
-          <li class="page-item"><a class="page-link" href="/products/<%= i %>"><%= i %></a></li>
+          <li class="page-item"><a class="page-link" href="/brands/<%= i %>"><%= i %></a></li>
           <% } %>
           <% if (i == Number(current) + 4 && i < pages) { %>
           <li class="page-item disabled">
@@ -114,7 +109,7 @@
             <a class="page-link" href="#">Last</a>
           </li>
           <% } else { %>
-          <li class="page-item"><a class="page-link" href="/products/<%= pages %>">Last</a></li>
+          <li class="page-item"><a class="page-link" href="/brands/<%= pages %>">Last</a></li>
           <% } %>
         </ul>
       </nav>
@@ -128,18 +123,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="createModalTitle">Add Product</h5>
+        <h5 class="modal-title" id="createModalTitle">Add brand</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body" id="createModalDescription">
-        <form id="createForm" method="post" action="/products">
+        <form id="createForm" method="post" action="/brands">
           <div class="form-row">
             <div class="form-group col-md-12">
               <label for="inputTitle">Title</label>
               <input name="title" type="text" class="form-control" id="inputTitle" placeholder="Title" required
-                     minlength="5" maxlength="25">
+                     minlength="2" maxlength="25">
             </div>
           </div>
           <div class="form-row">
@@ -148,37 +143,10 @@
               <textarea name="description" class="form-control" id="Description" rows="3" required minlength="10"
                         maxlength="100"></textarea>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-12">
-              <label for="inputPrice">Price</label>
-              <input name="price" type="number" class="form-control" id="inputPrice" placeholder="Price" required
-                     min="1" max="25000">
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <input class="btn btn-success" type="submit" value="Submit">
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-12">
-              <label for="inputBrand">Brand</label>
-              <select name="brand" id="inputBrand" class="form-control" required>
-                <% for(var k = 0; k < brands.length; k++) { %>
-                <option value="<%= brands[k]._id %>"><%= brands[k].title %></option>
-                <% } %>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-12">
-              <label for="inputType">Type</label>
-              <select name="type" id="inputType" class="form-control" required>
-                <% for(var l = 0; l < types.length; l++) { %>
-                <option value="<%= types[l]._id %>"><%= types[l].title %></option>
-                <% } %>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <input class="btn btn-success"  type="submit" value="Submit">
           </div>
         </form>
       </div>

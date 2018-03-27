@@ -35,11 +35,13 @@ function getBrands(query, page, limit) {
 // Retrieve specific Brand based on id
 function getBrand(id) {
   return new Promise((resolve, reject) => {
-    Brand.findOne({_id: id}, (err, brand) => {
+    Brand.findById(id, function (err, doc) {
       if (err) {
-        reject(err);
+        console.log(err);
+        reject(err)
       } else {
-        resolve(brand);
+        doc.remove(); //Removes the document
+        resolve(doc);
       }
     });
   });
@@ -48,7 +50,7 @@ function getBrand(id) {
 // Create a new Brand and save it to the database
 function createBrand(brand) {
   return new Promise((resolve, reject) => {
-    let newBrand = new brand({
+    let newBrand = new Brand({
       title: brand.title,
       description: brand.description,
     });
@@ -90,16 +92,30 @@ function updateBrand(brand) {
 // Delete a certain Brand from the database based on id
 function deleteBrand(id) {
   return new Promise((resolve, reject) => {
-    Brand.remove({_id: id}, (err, deletedBrand) => {
+    Brand.findById(id, function (err, doc) {
       if (err) {
-        reject(err);
+        console.log(err);
+        reject(err)
       } else {
-        resolve(deletedBrand);
+        doc.remove(); //Removes the document
+        resolve(doc);
       }
     });
   });
 }
 
+function getCount() {
+  return new Promise((resolve, reject) => {
+    Brand.count((err, count) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(count);
+      }
+    })
+  });
+}
+
 
 //export all the functions
-module.exports = {deleteBrand, updateBrand, getBrand, getBrands, createBrand};
+module.exports = {deleteBrand, updateBrand, getBrand, getBrands, createBrand, getCount};

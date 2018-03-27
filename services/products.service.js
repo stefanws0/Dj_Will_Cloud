@@ -9,13 +9,15 @@ _this = this;
 function getProducts(query, page, limit) {
   return new Promise((resolve, reject) => {
     let options = {
-      page,
-      limit
+      page: page,
+      limit: limit,
+      populate: ['brand', 'type']
     };
     Product.paginate(query, options, (err, products) => {
       if (err) {
         reject(err);
       } else {
+        console.log(products);
         resolve(products);
       }
     });

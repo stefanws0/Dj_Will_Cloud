@@ -14,14 +14,16 @@ exports.getProducts = (req, res, next) => {
   let limit = req.params.limit ? req.params.limit : 10;
 
 
-  promise.all([productService.getProducts({}, page, limit), productService.getCount()])
+  promise.all([productService.getProducts({}, page, limit), productService.getCount(), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
     .then((results) => {
-      return res.format({
+      return res.status(200).format({
         html: function () {
           res.render('products/index.ejs', {
             products: results[0].docs, // get the user out of session and pass to template
             current: page,
-            pages: Math.ceil(results[1] / limit)
+            pages: Math.ceil(results[1] / limit),
+            brands: results[2],
+            types: results[3]
           });
         },
         json: function () {
@@ -43,7 +45,7 @@ exports.getProduct = (req, res, next) => {
     .then((results) => {
       return res.format({
         html: function () {
-          res.render('products/edit.ejs', {
+          res.status(200).render('products/edit.ejs', {
             product: results[0], // get the user out of session and pass to template
             brands: results[1],
             types: results[2]
@@ -67,7 +69,14 @@ exports.createProduct = (req, res, next) => {
   };
   productService.createProduct(product)
     .then((createdProduct) => {
-      return res.status(201).json(createdProduct);
+      return res.status(201).format({
+        html: function () {
+          res.redirect('/products/1');
+        },
+        json: function () {
+          res.json(createdProduct);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -90,7 +99,6 @@ exports.updateProduct = (req, res, next) => {
       return res.status(200).json(updatedProduct)
     })
     .catch((e) => {
-      console.log(e);
       return res.status(400).send(e);
     });
 };
