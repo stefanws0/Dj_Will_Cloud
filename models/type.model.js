@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const mongoosePaginate = require('mongoose-paginate');
 mongoose.Promise = Promise;
-const Schema = mongoose.Schema;
 
 // variables
 let TypeSchema = new mongoose.Schema({

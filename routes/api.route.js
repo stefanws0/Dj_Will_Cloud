@@ -11,7 +11,7 @@ router.use('/', authentication);
 router.use('/products', isLoggedIn, products);
 router.use('/brands', isLoggedIn, brands);
 router.use('/types', isLoggedIn, types);
-// router.use('/users', isLoggedIn, isAdmin, users);
+router.use('/users', isLoggedIn, isAdmin, users);
 
 module.exports = router;
 

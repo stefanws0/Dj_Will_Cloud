@@ -2,61 +2,48 @@
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const mongoosePaginate = require('mongoose-paginate');
-const uniqueValidator = require('mongoose-unique-validator');
-const crypto = require('crypto');
 mongoose.Promise = Promise;
-const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt-nodejs');
 
 // variables
-let UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    lowercase: true,
-    required: [true, "can't be blank"],
-    match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
-    index: true
+let userSchema = mongoose.Schema({
+  local: {
+    email: String,
+    password: String,
   },
-  email: {
-    type: String,
-    lowercase: true,
-    required: [true, "can't be blank"],
-    match: [/\S+@\S+\.\S+/, 'is invalid'],
-    index: true
+  facebook: {
+    id: String,
+    token: String,
+    name: String,
+    email: String
   },
-  bio: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 5000
+  twitter: {
+    id: String,
+    token: String,
+    displayName: String,
+    username: String
   },
-  image: {
-    data: Buffer,
-    contentType: String
+  google: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
   },
-  hash: {
-    type: String,
-    required: true
-  },
-  salt: {
-    type: String,
-    required: true
-  }
-}, {timestamps: true});
+  role: Number
+
+});
 
 // set schema as schema in the database for Application
-UserSchema.plugin(mongoosePaginate);
-UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
+userSchema.plugin(mongoosePaginate);
 
-UserSchema.methods.setPassword = function(password){
-  this.salt = crypto.randomBytes(16).toString('hex');
-  this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+userSchema.methods.generateHash = function (password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-UserSchema.methods.validPassword = function(password) {
-  let hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-  return this.hash === hash;
+// checking if password is valid
+userSchema.methods.validPassword = function (password) {
+  return bcrypt.compareSync(password, this.local.password);
 };
-
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

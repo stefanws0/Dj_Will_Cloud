@@ -1,4 +1,5 @@
 // dependencies
+const promise = require('bluebird');
 const userService = require('../services/users.service');
 
 // variables
@@ -9,9 +10,22 @@ exports.getUsers = (req, res, next) => {
   let page = req.query.page ? req.query.page : 1;
   let limit = req.query.limit ? req.query.limit : 10;
 
-  userService.getUsers({}, page, limit)
-    .then((users) => {
-      return res.status(200).json(users);
+  promise.all([userService.getUsers({}, page, limit), userService.getCount()])
+    .then((results) => {
+      console.log(results);
+      return res.status(200).format({
+        html: function () {
+          res.render('users/index.ejs', {
+            users: results[0].docs,
+            current: page,
+            pages: Math.ceil(results[1] / limit),
+            user: req.user
+          });
+        },
+        json: function () {
+          res.json(results[0]);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -31,42 +45,32 @@ exports.getUser = (req, res, next) => {
     });
 };
 
-// export a method that sends a new application to the application service
-exports.createUser = (req, res, next) => {
-  let user = {
-    title: req.body.title
-  };
-  userService.createUser(user)
-    .then((createdUser) => {
-      return res.status(201).json(createdUser);
-    })
-    .catch((e) => {
-      return res.status(400).send(e);
-    });
-};
-
 // export a method that sends new information with id to the application service
-exports.updateType = (req, res, next) => {
-  let type = {
-    _id: req.body._id ? req.body._id : null,
-    title: req.body.title ? req.body.title : null
-  };
-  typeService.updateType(type)
-    .then((updatedType) => {
-      return res.status(200).json(updatedType)
-    })
-    .catch((e) => {
-      return res.status(400).send(e);
+exports.updateUser = (req, res, next) => {
+
+  let id = req.params.id ? req.params.id : null;
+  let role = req.body.role ? req.body.role : null;
+  userService.getUser(id)
+    .then((user) => {
+      console.log(user);
+      user.role = role;
+      userService.updateUser(user)
+        .then((updateUser) => {
+          return res.status(200).json(updateUser)
+        })
+        .catch((e) => {
+          return res.status(400).send(e);
+        });
     });
 };
 
 // export a method that send a application for removal to the application service
-exports.removeType = (req, res, next) => {
+exports.removeUser = (req, res, next) => {
   let id = req.params.id;
 
-  typeService.deleteType(id)
-    .then((type) => {
-      return res.status(204).json(type)
+  userService.deleteUser(id)
+    .then((user) => {
+      return res.status(204).json(user)
     })
     .catch((e) => {
       return res.status(400).send(e);

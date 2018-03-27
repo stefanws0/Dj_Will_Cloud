@@ -35,43 +35,17 @@ function getUser(id) {
   });
 }
 
-// Create a new Type and save it to the database
-function createUser(user) {
-  return new Promise((resolve, reject) => {
-    let newUser = new User({
-      username: user.username,
-      email: user.email,
-      bio: user.bio,
-      image: user.image
-    });
-    newUser.setPassword(user.password);
-    newUser.save((err, user) => {
-      if (err) {
-        reject(err);
-      }
-      else { //If no errors, send it back to the client
-        resolve(user);
-      }
-    });
-  });
-}
-
 // Update new information to a certain Type based on id
 function updateUser(user) {
   return new Promise((resolve, reject) => {
+    console.log(user);
     let id = user._id;
 
     User.findOne({_id: new ObjectId(id)}, (err, retrievedUser) => {
       if (err) {
         reject(err);
       } else {
-        retrievedUser.username = user.username;
-        retrievedUser.email = user.email;
-        retrievedUser.bio = user.bio;
-        retrievedUser.image = user.image;
-        if(!retrievedUser.validPassword(user.password)){
-          retrievedUser.setPassword(user.password);
-        }
+        retrievedUser.role = user.role;
         retrievedUser.save((err, user) => {
           if (err) {
             reject(err);
@@ -99,5 +73,16 @@ function deleteUser(id) {
 }
 
 
+function getCount() {
+  return new Promise((resolve, reject) => {
+    User.count((err, count) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(count);
+      }
+    })
+  });
+}
 //export all the functions
-module.exports = {deleteUser, updateUser, getUser, getUsers, createUser};
+module.exports = {deleteUser, updateUser, getUser, getUsers, getCount};

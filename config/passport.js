@@ -7,7 +7,7 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
-const User = require('../app/models/user');
+const User = require('../models/user.model');
 
 // load the auth variables
 const configAuth = require('./auth');
