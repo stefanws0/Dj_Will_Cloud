@@ -23,11 +23,43 @@
               alert(" Can't do because: " + arguments[0].responseJSON.message);
             },
             success: function () {
-              location.href = "/types/1";
+              location.href = "/types";
             }
           });
         });
       });
+
+      $('#editModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Button that triggered the modal
+        let id = button.data('id');
+        console.log(id);
+        let modal = $(this);
+        $.getJSON('/types/' + id, function (data) {
+          console.log(data);
+          // set values in modal
+          modal.find('[name=title]').val(data.title);
+          // open modal
+          modal.modal('show');
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          $('#editModalEditButton').button().click(function () {
+            $.ajax({
+              url: '/types/' + id,    //Your api url
+              type: 'PUT',   //type is any HTTP method,
+              dataType: "json",
+              data: $("#editForm").serialize(),
+              error: function (request, error) {
+                console.log(arguments);
+                alert(" Can't do because: " + arguments[0].responseJSON.message);
+              },
+              success: function () {
+                location.href = "/types";
+              }
+            });
+          });
+        });
+      });
+
     });
   </script>
 </head>
@@ -40,18 +72,22 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <h1 class="h2">Types</h1>
       </div>
+      <% if(user.role === 1) { %>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createModal">Add
           Type
         </button>
       </div>
+      <% } %>
       <div class="table-responsive">
         <table id="test" class="table table-striped table-sm">
           <thead>
           <tr>
             <th>#</th>
             <th>Title</th>
+            <% if(user.role === 1) { %>
             <th>Buttons</th>
+            <% } %>
           </tr>
           </thead>
           <tbody>
@@ -59,8 +95,9 @@
           <tr>
             <td><%= j + 1 %></td>
             <td><%= types[j].title %></td>
+            <% if(user.role === 1) { %>
             <td>
-              <a class="edit" id="edit" href="/types/<%= types[j]._id %>/edit">
+              <a class="edit" id="edit" data-toggle="modal" data-target="#editModal" data-id="<%= types[j]._id %>">
                 <span data-feather="edit-3"></span>
               </a>
               <a class="delete" id="delete" data-toggle="modal" data-target="#deleteModal"
@@ -68,6 +105,7 @@
                 <span data-feather="trash-2"></span>
               </a>
             </td>
+            <% } %>
           </tr>
           <% } %>
           </tbody>
@@ -138,6 +176,35 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <input class="btn btn-success"  type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalTitle">Edit Type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="editModalDescription">
+        <form id="editForm">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="inputTitle">Title</label>
+              <input name="title" type="text" class="form-control" id="editInputTitle" placeholder="Title" required
+                     minlength="5" maxlength="25">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="editModalEditButton" type="button" class="btn btn-primary">Save Changes</button>
           </div>
         </form>
       </div>

@@ -44,17 +44,11 @@ exports.getProduct = (req, res, next) => {
     .then((results) => {
       return res.format({
         html: function () {
-          if(req.user.role === 1) {
-            res.status(200).render('products/edit.ejs', {
+            res.status(200).render('products/details.ejs', {
               product: results[0], // get the user out of session and pass to template
               brands: results[1],
               types: results[2]
             });
-          } else {
-            res.status(200).render('products/details.ejs', {
-              product: results[0]
-            })
-          }
         },
         json: function () {
           res.json(results[0]);

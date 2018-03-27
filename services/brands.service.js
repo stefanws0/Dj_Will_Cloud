@@ -35,13 +35,11 @@ function getBrands(query, page, limit) {
 // Retrieve specific Brand based on id
 function getBrand(id) {
   return new Promise((resolve, reject) => {
-    Brand.findById(id, function (err, doc) {
+    Brand.findOne({_id: id}, (err, brand) => {
       if (err) {
-        console.log(err);
-        reject(err)
+        reject(err);
       } else {
-        doc.remove(); //Removes the document
-        resolve(doc);
+        resolve(brand);
       }
     });
   });

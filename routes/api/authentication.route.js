@@ -3,7 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 
 router.get('/', function (req, res) {
-  res.render('index.ejs'); // load the index.ejs file
+  res.redirect('/login');
 });
 
 router.get('/login', function (req, res) {
@@ -38,7 +38,7 @@ router.get('/signup', function (req, res) {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/profile', // redirect to the secure profile section
+  successRedirect: '/products?page=1', // redirect to the secure profile section
   failureRedirect: '/signup', // redirect back to the signup page if there is an error
   failureFlash: true // allow flash messages
 }));
@@ -63,7 +63,7 @@ router.get('/profile', isLoggedIn, function (req, res) {
 // LOGOUT
 router.get('/logout', function (req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect('/login');
 });
 
 router.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
@@ -71,7 +71,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'})
 // handle the callback after facebook has authenticated the user
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    successRedirect: '/profile',
+    successRedirect: '/products',
     failureRedirect: '/'
   }));
 
@@ -87,7 +87,7 @@ router.get('/auth/twitter', passport.authenticate('twitter'));
 // handle the callback after twitter has authenticated the user
 router.get('/auth/twitter/callback',
   passport.authenticate('twitter', {
-    successRedirect: '/profile',
+    successRedirect: '/products',
     failureRedirect: '/'
   }));
 
@@ -97,7 +97,7 @@ router.get('/auth/google', passport.authenticate('google', {scope: ['profile', '
 // the callback after google has authenticated the user
 router.get('/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/profile',
+    successRedirect: '/products',
     failureRedirect: '/'
   }));
 

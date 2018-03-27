@@ -19,6 +19,7 @@ exports.getBrands = (req, res, next) => {
             brands: results[0].docs,
             current: page,
             pages: Math.ceil(results[1] / limit),
+            user: req.user
           });
         },
         json: function () {
@@ -39,7 +40,7 @@ exports.getBrand = (req, res, next) => {
     .then((brand) => {
       return res.format({
         html: function () {
-          res.status(200).render('brands/edit.ejs', {
+          res.status(200).render('brands/index.ejs', {
             brand: brand
           });
         },
@@ -63,7 +64,7 @@ exports.createBrand = (req, res, next) => {
     .then((createdBrand) => {
       return res.status(201).format({
         html: function () {
-          res.redirect('/brands/1');
+          res.redirect('/brands');
         },
         json: function () {
           res.json(createdBrand);
