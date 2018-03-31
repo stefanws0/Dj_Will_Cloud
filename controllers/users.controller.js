@@ -23,7 +23,7 @@ exports.getUsers = (req, res, next) => {
           });
         },
         json: function () {
-          res.json(results[0]);
+          res.status(200).json(results[0]);
         }
       })
     })
@@ -45,7 +45,7 @@ exports.getUser = (req, res, next) => {
     });
 };
 
-// export a method that sends new information with id to the application service
+// export a method that sends new information with id to the user service
 exports.updateUser = (req, res, next) => {
 
   let id = req.params.id ? req.params.id : null;
@@ -64,7 +64,7 @@ exports.updateUser = (req, res, next) => {
     });
 };
 
-// export a method that send a application for removal to the application service
+// export a method that send a application for removal to the user service
 exports.removeUser = (req, res, next) => {
   let id = req.params.id;
 

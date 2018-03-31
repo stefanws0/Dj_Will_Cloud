@@ -1,5 +1,6 @@
 // dependencies
 const mongoose = require('mongoose');
+const validator = require('validator');
 const Promise = require('bluebird');
 const mongoosePaginate = require('mongoose-paginate');
 mongoose.Promise = Promise;
@@ -8,8 +9,20 @@ const bcrypt = require('bcrypt-nodejs');
 // variables
 let userSchema = mongoose.Schema({
   local: {
-    email: String,
-    password: String,
+    email: {
+      type: String,
+      required: true,
+      validate:{
+        validator: validator.isEmail,
+        message: '{VALUE} is not a valid email',
+        isAsync: false
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 5
+    },
   },
   facebook: {
     id: String,

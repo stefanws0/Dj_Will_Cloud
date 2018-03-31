@@ -5,7 +5,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 // variables
 _this = this;
 
-// Retrieve Types from database
+// Retrieve Users from database
 function getUsers(query, page, limit) {
   return new Promise((resolve, reject) => {
     let options = {
@@ -22,7 +22,7 @@ function getUsers(query, page, limit) {
   });
 }
 
-// Retrieve specific Type based on id
+// Retrieve specific User based on id
 function getUser(id) {
   return new Promise((resolve, reject) => {
     User.findOne({_id: id}, (err, user) => {
@@ -35,7 +35,7 @@ function getUser(id) {
   });
 }
 
-// Update new information to a certain Type based on id
+// Update new information to a certain User based on id
 function updateUser(user) {
   return new Promise((resolve, reject) => {
     console.log(user);
@@ -59,7 +59,7 @@ function updateUser(user) {
   });
 }
 
-// Delete a certain Type from the database based on id
+// Delete a certain User from the database based on id
 function deleteUser(id) {
   return new Promise((resolve, reject) => {
     User.remove({_id: id}, (err, deletedUser) => {

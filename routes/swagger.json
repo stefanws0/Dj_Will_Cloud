@@ -1,0 +1,725 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Retrochic API",
+    "description": "The documentation for the Retrochic API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "API for authentication in the system"
+    },
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    },
+    {
+      "name": "Products",
+      "description": "API for products in the system"
+    },
+    {
+      "name": "Types",
+      "description": "API for types in the system"
+    },
+    {
+      "name": "Brands",
+      "description": "API for brands in the system"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Check if email and password are linked to user is logged in, if so redirect the user to the products page",
+        "parameters": [
+          {
+            "name": "loginForm",
+            "in": "body",
+            "description": "Form with data linked with user",
+            "schema": {
+              "$ref": "#/definitions/AuthenticationForm"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login, Redirected to Products"
+          },
+          "400": {
+            "description": "Unsuccessful login, Redirect to Login"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Return the login page"
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Check if email and password are linked to user else create an user",
+        "parameters": [
+          {
+            "name": "signupForm",
+            "in": "body",
+            "description": "Form with data linked with user",
+            "schema": {
+              "$ref": "#/definitions/AuthenticationForm"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful signup, Redirected to Products"
+          },
+          "400": {
+            "description": "Unsuccessful signup, Redirect to Signup"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Return the signup page"
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout the current user and redirect to the login page"
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of user that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "User is found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user with given ID",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "User is deleted",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user with give ID",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Create new product in system",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Product that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New product is created",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get all products in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Products"
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "parameters": [
+        {
+          "name": "productId",
+          "in": "path",
+          "required": true,
+          "description": "ID of brand that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get product with given ID",
+        "responses": {
+          "200": {
+            "description": "Product is found",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete product with given ID",
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Product is deleted",
+            "schema": {
+              "$ref": "#/definitions/Products"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update product with give ID",
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Product with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product is updated",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
+    "/brands": {
+      "post": {
+        "tags": [
+          "Brands"
+        ],
+        "description": "Create new brand in system",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "body",
+            "description": "Brand that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Brand"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New brand is created",
+            "schema": {
+              "$ref": "#/definitions/Brand"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Get all brands in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Brands"
+            }
+          }
+        }
+      }
+    },
+    "/brands/{brandId}": {
+      "parameters": [
+        {
+          "name": "brandId",
+          "in": "path",
+          "required": true,
+          "description": "ID of brand that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Get brand with given ID",
+        "responses": {
+          "200": {
+            "description": "Brand is found",
+            "schema": {
+              "$ref": "#/definitions/Brand"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete brand with given ID",
+        "tags": [
+          "Brands"
+        ],
+        "responses": {
+          "200": {
+            "description": "Brand is deleted",
+            "schema": {
+              "$ref": "#/definitions/Brands"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update brand with give ID",
+        "tags": [
+          "Brands"
+        ],
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "body",
+            "description": "Brand with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Brand"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Brand is updated",
+            "schema": {
+              "$ref": "#/definitions/Brand"
+            }
+          }
+        }
+      }
+    },
+    "/types": {
+      "post": {
+        "tags": [
+          "Types"
+        ],
+        "description": "Create new type in system",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "body",
+            "description": "Type that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Type"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New type is created",
+            "schema": {
+              "$ref": "#/definitions/Type"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Types"
+        ],
+        "summary": "Get all types in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Types"
+            }
+          }
+        }
+      }
+    },
+    "/types/{typeId}": {
+      "parameters": [
+        {
+          "name": "typeId",
+          "in": "path",
+          "required": true,
+          "description": "ID of type that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Types"
+        ],
+        "summary": "Get type with given ID",
+        "responses": {
+          "200": {
+            "description": "Type is found",
+            "schema": {
+              "$ref": "#/definitions/Type"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete type with given ID",
+        "tags": [
+          "Types"
+        ],
+        "responses": {
+          "200": {
+            "description": "Type is deleted",
+            "schema": {
+              "$ref": "#/definitions/Types"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update type with give ID",
+        "tags": [
+          "Types"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "body",
+            "description": "Type with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Type is updated",
+            "schema": {
+              "$ref": "#/definitions/Type"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Local": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Facebook": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "token": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "Twitter": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "token": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Google": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "token": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "required": [
+        "email",
+        "password",
+        "_id",
+        "role"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "local": {
+          "$ref": "#/definitions/Local"
+        },
+        "facebook": {
+          "$ref": "#/definitions/Facebook"
+        },
+        "twitter": {
+          "$ref": "#/definitions/Twitter"
+        },
+        "google": {
+          "$ref": "#/definitions/Google"
+        },
+        "role": {
+          "type": "number"
+        }
+      }
+    },
+    "Users": {
+      "type": "array",
+      "$ref": "#/definitions/User"
+    },
+    "Type": {
+      "required": [
+        "title",
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "title": {
+          "type": "string",
+          "minlength": "2",
+          "maxlength": "25"
+        }
+      }
+    },
+    "Types": {
+      "type": "array",
+      "$ref": "#/definitions/Type"
+    },
+    "Brand": {
+      "required": [
+        "_id",
+        "title",
+        "description"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "title": {
+          "type": "string",
+          "minlength": "5",
+          "maxlength": "25"
+        },
+        "description": {
+          "type": "string",
+          "minlength": "10",
+          "maxlength": "100"
+        }
+      }
+    },
+    "Brands": {
+      "type": "array",
+      "$ref": "#/definitions/Brand"
+    },
+    "Product": {
+      "required": [
+        "_id",
+        "title",
+        "description",
+        "price",
+        "type",
+        "brand"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "title": {
+          "type": "string",
+          "minlength": "5",
+          "maxlength": "25"
+        },
+        "description": {
+          "type": "string",
+          "minlength": "10",
+          "maxlength": "100"
+        },
+        "price": {
+          "type": "number",
+          "min": "0",
+          "max": "25000"
+        },
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "brand": {
+          "$ref": "#/definitions/Facebook"
+        }
+      }
+    },
+    "Products": {
+      "type": "array",
+      "$ref": "#/definitions/Product"
+    },
+    "AuthenticationForm": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

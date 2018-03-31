@@ -26,7 +26,7 @@ let ProductSchema = new mongoose.Schema({
     max: 25000
   },
   type: { type: Schema.Types.ObjectId, ref: 'Type', required: true},
-  brand: { type: Schema.Types.ObjectId, ref: 'Brand' }
+  brand: { type: Schema.Types.ObjectId, ref: 'Brand', required: true }
 });
 
 
