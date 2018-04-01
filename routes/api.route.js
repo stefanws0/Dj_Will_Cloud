@@ -22,11 +22,13 @@ module.exports = router;
 function isLoggedIn(req, res, next) {
 
   // if user is authenticated in the session, carry on
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
+    console.log("isauthenticated");
     return next();
+  }
 
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  res.redirect('/login');
 }
 
 function isAdmin(req, res, next) {
