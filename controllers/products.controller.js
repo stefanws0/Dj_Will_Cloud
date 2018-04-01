@@ -9,10 +9,11 @@ _this = this;
 
 // export method that retrieves the applications from the application service
 exports.getProducts = (req, res, next) => {
+  let query = req.query.q ? req.query.q : {};
   let page = req.query.page ? req.query.page : 1;
   let limit = req.query.limit ? req.query.limit : 10;
 
-  promise.all([productService.getProducts({}, page, limit), productService.getCount(), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
+  promise.all([productService.getProducts(query, page, limit), productService.getCount(), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
     .then((results) => {
       return res.status(200).format({
         html: function () {
