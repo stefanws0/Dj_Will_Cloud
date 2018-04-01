@@ -9,13 +9,15 @@ _this = this;
 function getProducts(query, page, limit) {
   return new Promise((resolve, reject) => {
     let options = {
-      page,
-      limit
+      page: page,
+      limit: limit,
+      populate: ['brand', 'type']
     };
     Product.paginate(query, options, (err, products) => {
       if (err) {
         reject(err);
       } else {
+        console.log(products);
         resolve(products);
       }
     });
@@ -96,6 +98,18 @@ function deleteProduct(id) {
   });
 }
 
+function getCount() {
+  return new Promise((resolve, reject) => {
+    Product.count((err, count) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(count);
+      }
+    })
+  });
+}
+
 
 //export all the functions
-module.exports = {deleteProduct, updateProduct, getProduct, getProducts, createProduct};
+module.exports = {deleteProduct, updateProduct, getProduct, getProducts, createProduct, getCount};

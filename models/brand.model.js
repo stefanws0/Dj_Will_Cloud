@@ -20,6 +20,11 @@ let BrandSchema = new mongoose.Schema({
   }
 });
 
+BrandSchema.pre('remove', function(next) {
+  console.log("hi");
+  this.model('Product').remove({ brand: this._id }, next);
+});
+
 // set schema as schema in the database for Application
 BrandSchema.plugin(mongoosePaginate);
 const Brand = mongoose.model('Brand', BrandSchema);

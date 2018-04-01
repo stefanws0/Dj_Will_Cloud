@@ -4,9 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "prestart": "start mongod",
     "start": "nodemon ./bin/www",
-    "poststop": "start mongo admin --eval 'db.shutdownServer()' > /dev/null",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -36,6 +34,8 @@
     "passport-twitter": "^1.0.4",
     "rxjs": "^5.5.6",
     "serve-favicon": "^2.4.5",
+    "swagger-ui-express": "^3.0.6",
+    "validator": "^9.4.1",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {

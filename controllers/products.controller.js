@@ -1,5 +1,8 @@
 // dependencies
+const promise = require('bluebird');
 const productService = require('../services/products.service');
+const brandService = require('../services/brands.service');
+const typeService = require('../services/types.service');
 
 // variables
 _this = this;
@@ -9,21 +12,26 @@ exports.getProducts = (req, res, next) => {
   let page = req.query.page ? req.query.page : 1;
   let limit = req.query.limit ? req.query.limit : 10;
 
-  productService.getProducts({}, page, limit)
-    .then((products) => {
-      console.log(products);
-      return res.format({
+  promise.all([productService.getProducts({}, page, limit), productService.getCount(), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
+    .then((results) => {
+      return res.status(200).format({
         html: function () {
           res.render('products/index.ejs', {
-            products: products.docs // get the user out of session and pass to template
+            products: results[0].docs, // get the user out of session and pass to template
+            current: page,
+            pages: Math.ceil(results[1] / limit),
+            brands: results[2],
+            types: results[3],
+            user: req.user
           });
         },
         json: function () {
-          res.json(products);
+          res.json(results[0]);
         }
       })
     })
     .catch((e) => {
+      console.log(e);
       return res.status(400).send(e);
     });
 };
@@ -32,21 +40,20 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   let id = req.params.id;
 
-  productService.getProduct(id)
-    .then((product) => {
+  promise.all([productService.getProduct(id), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
+    .then((results) => {
       return res.format({
-        html: () => {
-          res.render('products/edit.ejs', {
-            product: product
-          });
+        html: function () {
+            res.status(200).render('products/details.ejs', {
+              product: results[0], // get the user out of session and pass to template
+              brands: results[1],
+              types: results[2]
+            });
         },
-        json: () => {
-          res.json(product);
+        json: function () {
+          res.json(results[0]);
         }
       })
-    })
-    .catch((e) => {
-      return res.status(400).send(e);
     });
 };
 
@@ -61,7 +68,14 @@ exports.createProduct = (req, res, next) => {
   };
   productService.createProduct(product)
     .then((createdProduct) => {
-      return res.status(201).json(createdProduct);
+      return res.status(201).format({
+        html: function () {
+          res.redirect('/products?page=1');
+        },
+        json: function () {
+          res.json(createdProduct);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -76,8 +90,9 @@ exports.updateProduct = (req, res, next) => {
     description: req.body.description ? req.body.description : null,
     price: req.body.price ? req.body.price : null,
     brand: req.body.brand ? req.body.brand : null,
-    type: req.body.type ? req.body.type: null
+    type: req.body.type ? req.body.type : null
   };
+  console.log(product);
 
   productService.updateProduct(product)
     .then((updatedProduct) => {

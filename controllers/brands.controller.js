@@ -1,4 +1,5 @@
 // dependencies
+const promise = require('bluebird');
 const brandService = require('../services/brands.service');
 
 // variables
@@ -9,9 +10,22 @@ exports.getBrands = (req, res, next) => {
   let page = req.query.page ? req.query.page : 1;
   let limit = req.query.limit ? req.query.limit : 10;
 
-  brandService.getBrands({}, page, limit)
-    .then((brands) => {
-      return res.status(200).json(brands);
+  promise.all([brandService.getBrands({}, page, limit), brandService.getCount()])
+    .then((results) => {
+      console.log(results);
+      return res.status(200).format({
+        html: function () {
+          res.render('brands/index.ejs', {
+            brands: results[0].docs,
+            current: page,
+            pages: Math.ceil(results[1] / limit),
+            user: req.user
+          });
+        },
+        json: function () {
+          res.json(results[0]);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -24,7 +38,16 @@ exports.getBrand = (req, res, next) => {
 
   brandService.getBrand(id)
     .then((brand) => {
-      return res.status(200).json(brand);
+      return res.format({
+        html: function () {
+          res.status(200).render('brands/index.ejs', {
+            brand: brand
+          });
+        },
+        json: function () {
+          res.status(200).json(brand);
+        }
+      })
     })
     .catch((e) => {
       return res.status(400).send(e);
@@ -36,14 +59,20 @@ exports.createBrand = (req, res, next) => {
   let brand = {
     title: req.body.title,
     description: req.body.description,
-    price: req.body.price,
-    brand: req.body.brand,
   };
   brandService.createBrand(brand)
     .then((createdBrand) => {
-      return res.status(201).json(createdBrand);
+      return res.status(201).format({
+        html: function () {
+          res.redirect('/brands');
+        },
+        json: function () {
+          res.json(createdBrand);
+        }
+      })
     })
     .catch((e) => {
+      console.log(e);
       return res.status(400).send(e);
     });
 };
@@ -51,11 +80,9 @@ exports.createBrand = (req, res, next) => {
 // export a method that sends new information with id to the application service
 exports.updateBrand = (req, res, next) => {
   let brand = {
-    _id: req.body._id ? req.body._id : null,
+    _id: req.params.id ? req.params.id : null,
     title: req.body.title ? req.body.title : null,
     description: req.body.description ? req.body.description : null,
-    price: req.body.price ? req.body.price : null,
-    brand: req.body.brand ? req.body.brand : null
   };
   brandService.updateBrand(brand)
     .then((updatedBrand) => {

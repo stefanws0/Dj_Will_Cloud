@@ -12,13 +12,23 @@ function getTypes(query, page, limit) {
       page,
       limit
     };
-    Type.paginate(query, options, (err, types) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(types);
-      }
-    });
+    if(limit === 0){
+      Type.find((err, types) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(types);
+        }
+      })
+    }else {
+      Type.paginate(query, options, (err, types) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(types);
+        }
+      });
+    }
   });
 }
 
@@ -78,16 +88,28 @@ function updateType(type) {
 // Delete a certain Type from the database based on id
 function deleteType(id) {
   return new Promise((resolve, reject) => {
-    Type.remove({_id: id}, (err, deletedType) => {
+    Type.findById(id, function (err, doc) {
       if (err) {
-        reject(err);
+        console.log(err);
+        reject(err)
       } else {
-        resolve(deletedType);
+        doc.remove(); //Removes the document
+        resolve(doc);
       }
     });
   });
 }
 
-
+function getCount() {
+  return new Promise((resolve, reject) => {
+    Type.count((err, count) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(count);
+      }
+    })
+  });
+}
 //export all the functions
-module.exports = {deleteType, updateType, getType, getTypes, createType};
+module.exports = {deleteType, updateType, getType, getTypes, createType, getCount};

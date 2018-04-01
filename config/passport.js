@@ -7,7 +7,7 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
-const User = require('../app/models/user');
+const User = require('../models/user.model');
 
 // load the auth variables
 const configAuth = require('./auth');
@@ -70,6 +70,7 @@ module.exports = function (passport) {
             // set the user's local credentials
             newUser.local.email = email;
             newUser.local.password = newUser.generateHash(password);
+            newUser.role = 0;
 
             // save the user
             newUser.save(function (err) {
@@ -157,6 +158,7 @@ module.exports = function (passport) {
               newUser.facebook.token = token; // we will save the token that facebook provides to the user
               newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
               newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+              newUser.role = 0;
 
               // save our user to the database
               newUser.save(function (err) {
@@ -225,6 +227,7 @@ module.exports = function (passport) {
               newUser.twitter.token = token;
               newUser.twitter.username = profile.username;
               newUser.twitter.displayName = profile.displayName;
+              newUser.role = 0;
 
               newUser.save(function (err) {
                 if (err)
@@ -286,6 +289,7 @@ module.exports = function (passport) {
               newUser.google.token = token;
               newUser.google.name = profile.displayName;
               newUser.google.email = profile.emails[0].value; // pull the first email
+              newUser.role = 0;
 
               // save the user
               newUser.save(function (err) {
