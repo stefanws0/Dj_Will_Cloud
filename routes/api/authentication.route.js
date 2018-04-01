@@ -71,7 +71,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'})
 // handle the callback after facebook has authenticated the user
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
-    successRedirect: '/products',
+    successRedirect: '/profile',
     failureRedirect: '/'
   }));
 
@@ -87,7 +87,7 @@ router.get('/auth/twitter', passport.authenticate('twitter'));
 // handle the callback after twitter has authenticated the user
 router.get('/auth/twitter/callback',
   passport.authenticate('twitter', {
-    successRedirect: '/products',
+    successRedirect: '/profile',
     failureRedirect: '/'
   }));
 
@@ -97,7 +97,7 @@ router.get('/auth/google', passport.authenticate('google', {scope: ['profile', '
 // the callback after google has authenticated the user
 router.get('/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/products',
+    successRedirect: '/profile',
     failureRedirect: '/'
   }));
 
