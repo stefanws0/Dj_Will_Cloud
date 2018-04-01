@@ -13,7 +13,7 @@ router.get('/login', function (req, res) {
       res.render('login.ejs', {message: req.flash('loginMessage')});
     },
     json: function () {
-      res.json("Error");
+      res.json(req.flash('loginMessage'));
     }
   });
 });
