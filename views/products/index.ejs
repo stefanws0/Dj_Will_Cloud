@@ -104,7 +104,7 @@
           <tbody>
           <% for(let j = 0; j < products.length; j++) { %>
           <% if(user.role !== 1) { %>
-          <tr class='clickable-row' data-href='/products/<%= products[j]._id %>/edit'>
+          <tr class='clickable-row' data-href='/products/<%= products[j]._id %>'>
             <% } else { %>
           <tr>
             <% } %>

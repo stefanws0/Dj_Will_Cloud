@@ -10,13 +10,14 @@ const passport = require('passport');
 const flash    = require('connect-flash');
 const session = require('express-session');
 const api = require('./routes/api.route');
+let config = require('config');
 
 const app = express();
 
 // database connection
 mongoose.Promise = bluebird;
 let databaseURL = "mongodb://admin2:admin@ds151908.mlab.com:51908/retro-chic";
-mongoose.connect(databaseURL)
+mongoose.connect(config.DBHost)
   .then(() => {
     console.log('Succesfully connected to the Database at URL: ' + databaseURL);
   })
@@ -37,7 +38,13 @@ app.use(function (req, res, next) {
 // view engine setup
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+
+if(config.util.getEnv('NODE_ENV') !== 'test') {
+  //use morgan to log at command line
+  app.use(logger('combined')); //'combined' outputs the Apache style LOGs
+}else{
+  app.use(logger('dev'));
+}
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
