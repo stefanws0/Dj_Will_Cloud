@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "SET NODE_ENV=dev&& node ./bin/www",
+    "start": "node ./bin/www",
     "build": "ng build --prod",
     "test": "nyc --reporter=text mocha",
     "lint": "ng lint",

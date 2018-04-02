@@ -19,7 +19,7 @@ mongoose.Promise = bluebird;
 let databaseURL = "mongodb://admin2:admin@ds151908.mlab.com:51908/retro-chic";
 mongoose.connect(config.DBHost)
   .then(() => {
-    console.log('Succesfully connected to the Database at URL: ' + databaseURL);
+    console.log('Succesfully connected to the Database at URL: ' + config.DBHost);
   })
   .catch(() => {
     console.log('Error connecting to the Database at URL: ' + databaseURL)
