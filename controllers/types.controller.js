@@ -40,9 +40,7 @@ exports.getType = (req, res, next) => {
     .then((type) => {
       return res.format({
         html: function () {
-          res.status(200).render('types/index.ejs', {
-            type: type
-          });
+          res.redirect('/types');
         },
         json: function () {
           res.status(200).json(type);

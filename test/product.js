@@ -323,8 +323,7 @@ describe('Products', () => {
         .set('Accept', 'text/html')
         .send(product)
         .end((err, res) => {
-          res.should.have.status(201);
-          res.text.should.be.a("string");
+          res.should.have.status(302);
           done();
         });
     });

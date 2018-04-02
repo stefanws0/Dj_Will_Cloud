@@ -153,8 +153,7 @@ describe('Types', () => {
         authenticatedUser.get('/types/' + type._id)
           .set('Accept', 'text/html')
           .end(function (err, res) {
-            res.should.have.status(204);
-            res.text.should.be.a("string");
+            res.should.have.status(302);
             done();
           });
       });
@@ -192,7 +191,7 @@ describe('Types', () => {
             title: "Test Update Type"
           })
           .end(function (err, res) {
-            res.should.have.status(204);
+            res.should.have.status(200);
             res.text.should.be.a("string");
             done();
           });

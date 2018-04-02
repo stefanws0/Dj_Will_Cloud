@@ -40,9 +40,7 @@ exports.getBrand = (req, res, next) => {
     .then((brand) => {
       return res.format({
         html: function () {
-          res.status(200).render('brands/index.ejs', {
-            brand: brand
-          });
+          res.redirect('/brands');
         },
         json: function () {
           res.status(200).json(brand);

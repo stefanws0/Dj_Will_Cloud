@@ -202,8 +202,7 @@ describe('Brands', () => {
         authenticatedUser.get('/brands/' + brand._id)
           .set('Accept', 'text/html')
           .end(function (err, res) {
-            res.should.have.status(200);
-            res.text.should.be.a("string");
+            res.should.have.status(302);
             done();
           });
       });
