@@ -144,7 +144,20 @@ describe('Types', () => {
             done();
           });
       });
-
+    });
+    it('it should GET a type by the given id and return html', (done) => {
+      let type = new Type({
+        title: "Test Type"
+      });
+      type.save((err, type) => {
+        authenticatedUser.get('/types/' + type._id)
+          .set('Accept', 'text/html')
+          .end(function (err, res) {
+            res.should.have.status(204);
+            res.text.should.be.a("string");
+            done();
+          });
+      });
     });
   });
   describe('/PUT/:id type', () => {
@@ -168,6 +181,23 @@ describe('Types', () => {
           });
       });
     });
+    it('it should UPDATE a type given the id and return html', (done) => {
+      let type = new Type({
+        title: "Test Type"
+      });
+      type.save((err, type) => {
+        authenticatedUser.put('/types/' + type._id)
+          .set('Accept', 'text/html')
+          .send({
+            title: "Test Update Type"
+          })
+          .end(function (err, res) {
+            res.should.have.status(204);
+            res.text.should.be.a("string");
+            done();
+          });
+      });
+    });
   });
   describe('/DELETE/:id type', () => {
     it('it should DELETE a type given the id', (done) => {
@@ -181,6 +211,20 @@ describe('Types', () => {
             res.should.have.status(204);
             res.body.should.be.a('object');
             res.should.have.property('ok').eql(true);
+            done();
+          });
+      });
+    });
+    it('it should DELETE a type given the id and return html', (done) => {
+      let type = new Type({
+        title: "Test Type"
+      });
+      type.save((err, brand) => {
+        authenticatedUser.delete('/types/' + type.id)
+          .set('Accept', 'text/html')
+          .end(function (err, res) {
+            res.should.have.status(204);
+            res.text.should.be.a("string");
             done();
           });
       });

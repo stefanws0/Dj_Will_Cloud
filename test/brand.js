@@ -192,7 +192,21 @@ describe('Brands', () => {
             done();
           });
       });
-
+    });
+    it('it should GET a brand by the given id and return html', (done) => {
+      let brand = new Brand({
+        title: "Test Brand",
+        description: "Test Brand Description"
+      });
+      brand.save((err, brand) => {
+        authenticatedUser.get('/brands/' + brand._id)
+          .set('Accept', 'text/html')
+          .end(function (err, res) {
+            res.should.have.status(200);
+            res.text.should.be.a("string");
+            done();
+          });
+      });
     });
   });
   describe('/PUT/:id brand', () => {
@@ -219,6 +233,25 @@ describe('Brands', () => {
           });
       });
     });
+    it('it should UPDATE a product given the id and return html', (done) => {
+      let brand = new Brand({
+        title: "Test Brand",
+        description: "Test Brand Description"
+      });
+      brand.save((err, brand) => {
+        authenticatedUser.put('/brands/' + brand._id)
+          .set('Accept', 'text/html')
+          .send({
+            title: "Test Update Brand",
+            description: "Test Brand Description"
+          })
+          .end(function (err, res) {
+            res.should.have.status(200);
+            res.text.should.be.a("string");
+            done();
+          });
+      });
+    });
   });
   describe('/DELETE/:id brand', () => {
     it('it should DELETE a brand given the id', (done) => {
@@ -233,6 +266,21 @@ describe('Brands', () => {
             res.should.have.status(204);
             res.body.should.be.a('object');
             res.should.have.property('ok').eql(true);
+            done();
+          });
+      });
+    });
+    it('it should DELETE a brand given the id and return html', (done) => {
+      let brand = new Brand({
+        title: "Test Brand",
+        description: "Test Brand Description"
+      });
+      brand.save((err, brand) => {
+        authenticatedUser.delete('/brands/' + brand.id)
+          .set('Accept', 'text/html')
+          .end(function (err, res) {
+            res.should.have.status(204);
+            res.text.should.be.a("string");
             done();
           });
       });
