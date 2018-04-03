@@ -51,7 +51,7 @@ exports.getProduct = (req, res, next) => {
               product: results[0], // get the user out of session and pass to template
               brands: results[1],
               types: results[2],
-              user: req.user
+              user: req.user ? req.user : null
             });
         },
         json: function () {

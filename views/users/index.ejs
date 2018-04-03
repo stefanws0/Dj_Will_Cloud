@@ -67,7 +67,7 @@
             <th>Twitter</th>
             <th>Google+</th>
             <th>Admin</th>
-            <% if(user.role === 1) { %>
+            <% if(user && user.role === 1) { %>
             <th>Buttons</th>
             <% } %>
           </tr>
@@ -97,7 +97,7 @@
             <% } else { %>
             <td><span data-feather="x"></span></td>
             <% } %>
-            <% if(user.role === 1 && user._id.toString() !== users[j]._id.toString()) { %>
+            <% if(user && user.role === 1 && user._id.toString() !== users[j]._id.toString()) { %>
             <td>
               <a class="edit" id="editAdmin" data-toggle="tooltip" data-placement="top" title="<% if(users[j].role !== 1) { %>Give admin<% } else{ %>Remove admin<% } %>"
                  data-id="<%= users[j]._id %>" data-role="<% if(users[j].role === 1) { %>0<% } else { %>1<% } %>">

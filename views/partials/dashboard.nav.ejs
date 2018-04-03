@@ -19,7 +19,7 @@
           Types
         </a>
       </li>
-      <% if(user.role === 1) { %>
+      <% if(user && user.role === 1) { %>
       <li class="nav-item">
         <a class="nav-link" href="/users">
           <span data-feather="users"></span>

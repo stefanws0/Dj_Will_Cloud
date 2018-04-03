@@ -79,7 +79,7 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <h1 class="h2">Products</h1>
       </div>
-      <% if(user.role === 1) { %>
+      <% if(user && user.role === 1) { %>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#createModal">Add
           Product
@@ -96,14 +96,14 @@
             <th>Brand</th>
             <th>Type</th>
             <th>Price</th>
-            <% if(user.role === 1) { %>
+            <% if(user && user.role === 1) { %>
             <th>Buttons</th>
             <% } %>
           </tr>
           </thead>
           <tbody>
           <% for(let j = 0; j < products.length; j++) { %>
-          <% if(user.role !== 1) { %>
+          <% if(!user || user.role !== 1) { %>
           <tr class='clickable-row' data-href='/products/<%= products[j]._id %>'>
             <% } else { %>
           <tr>
@@ -114,7 +114,7 @@
             <td><%= products[j].brand.title %></td>
             <td><%= products[j].type.title %></td>
             <td><%= products[j].price %></td>
-            <% if(user.role === 1) { %>
+            <% if(user && user.role === 1) { %>
             <td>
               <a class="edit" id="edit" data-toggle="modal" data-target="#editModal" data-id="<%= products[j]._id %>">
                 <span data-feather="edit-3"></span>

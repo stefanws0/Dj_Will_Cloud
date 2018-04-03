@@ -12,10 +12,10 @@ const users = require('./api/users.route');
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/api/v1', router);
 router.use('/', authentication);
-router.use('/products', isLoggedIn, products);
-router.use('/brands', isLoggedIn, brands);
-router.use('/types', isLoggedIn, types);
-router.use('/users', isLoggedIn, isAdmin, users);
+router.use('/products', products);
+router.use('/brands', brands);
+router.use('/types', types);
+router.use('/users', isAdmin, users);
 
 module.exports = router;
 
