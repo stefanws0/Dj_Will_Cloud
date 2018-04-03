@@ -9,7 +9,7 @@ let BrandSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 2,
     maxlength: 25
   },
   description: {
