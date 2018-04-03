@@ -67,6 +67,7 @@ exports.createProduct = (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     price: req.body.price,
+    image: req.body.image,
     brand: req.body.brand,
     type: req.body.type
   };
@@ -93,6 +94,7 @@ exports.updateProduct = (req, res, next) => {
     title: req.body.title ? req.body.title : null,
     description: req.body.description ? req.body.description : null,
     price: req.body.price ? req.body.price : null,
+    image: req.body.image ? req.body.image : null,
     brand: req.body.brand ? req.body.brand : null,
     type: req.body.type ? req.body.type : null
   };

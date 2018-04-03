@@ -25,6 +25,10 @@ let ProductSchema = new mongoose.Schema({
     min: 0,
     max: 25000
   },
+  image: {
+    type: String,
+    required: false
+  },
   type: { type: Schema.Types.ObjectId, ref: 'Type', required: true},
   brand: { type: Schema.Types.ObjectId, ref: 'Brand', required: true }
 });

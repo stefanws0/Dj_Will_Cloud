@@ -44,6 +44,7 @@ function createProduct(product) {
       title: product.title,
       description: product.description,
       price: product.price,
+      image: product.image,
       brand: product.brand,
       type: product.type
     });
@@ -70,6 +71,7 @@ function updateProduct(product) {
         retrievedProduct.title = product.title;
         retrievedProduct.description = product.description;
         retrievedProduct.price = product.price;
+        retrievedProduct.image = product.image;
         retrievedProduct.brand = product.brand;
         retrievedProduct.type = product.type;
         retrievedProduct.save((err, product) => {
