@@ -19,7 +19,7 @@ exports.getBrands = (req, res, next) => {
             brands: results[0].docs,
             current: page,
             pages: Math.ceil(results[1] / limit),
-            user: req.user
+            user: req.user ? req.user : null
           });
         },
         json: function () {
@@ -40,9 +40,7 @@ exports.getBrand = (req, res, next) => {
     .then((brand) => {
       return res.format({
         html: function () {
-          res.status(200).render('brands/index.ejs', {
-            brand: brand
-          });
+          res.redirect('/brands');
         },
         json: function () {
           res.status(200).json(brand);

@@ -19,7 +19,7 @@ exports.getTypes = (req, res, next) => {
             types: results[0].docs,
             current: page,
             pages: Math.ceil(results[1] / limit),
-            user: req.user
+            user: req.user ? req.user : null
           });
         },
         json: function () {
@@ -40,9 +40,7 @@ exports.getType = (req, res, next) => {
     .then((type) => {
       return res.format({
         html: function () {
-          res.status(200).render('types/index.ejs', {
-            type: type
-          });
+          res.redirect('/types');
         },
         json: function () {
           res.status(200).json(type);

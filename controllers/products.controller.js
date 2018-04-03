@@ -40,15 +40,18 @@ exports.getProducts = (req, res, next) => {
 // export method that retrieves a single application based on id from the application service
 exports.getProduct = (req, res, next) => {
   let id = req.params.id;
+  console.log(id);
 
   promise.all([productService.getProduct(id), brandService.getBrands({}, 0, 0), typeService.getTypes({}, 0, 0)])
     .then((results) => {
       return res.format({
         html: function () {
+          console.log(results);
             res.status(200).render('products/details.ejs', {
               product: results[0], // get the user out of session and pass to template
               brands: results[1],
-              types: results[2]
+              types: results[2],
+              user: req.user ? req.user : null
             });
         },
         json: function () {

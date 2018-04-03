@@ -19,7 +19,7 @@ exports.getUsers = (req, res, next) => {
             users: results[0].docs,
             current: page,
             pages: Math.ceil(results[1] / limit),
-            user: req.user
+            user: req.user ? req.user : null
           });
         },
         json: function () {
